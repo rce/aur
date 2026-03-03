@@ -1,0 +1,29 @@
+pkgname=reed-tpse
+pkgver=1.0.0.r10.gc550fa6
+pkgrel=1
+pkdesc='Utility for controlling TRYX Panorama AIO Cooler LCD screen'
+url="https://github.com/fadli0029/reed-tpse"
+arch=('any')
+license=('MIT')
+depends=('android-tools')
+makedepends=('git' 'cmake')
+source=("$pkgname::git+https://github.com/fadli0029/reed-tpse")
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+  cd "$pkgname"
+  mkdir -p build && cd build
+  cmake ..
+  make
+}
+
+package() {
+  cd "$pkgname"
+  cd build
+  make DESTDIR="$pkgdir" install
+}
